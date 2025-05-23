@@ -1,0 +1,55 @@
+<ion-app>
+  <ng-container *ngIf="isLoading">
+    <ion-content class="ion-padding">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando...</p>
+    </ion-content>
+  </ng-container>
+
+  <ng-container *ngIf="!isLoading && user; else loginView">
+    <ion-split-pane contentId="main-content">
+      <ion-menu contentId="main-content" type="overlay" >
+        <ion-content>
+          <ion-list id="inbox-list">
+            <img *ngIf="user.photoURL" [src]="user.photoURL" alt="Avatar" style="border-radius: 50%; width: 64px; height: 64px;">
+            <ion-list-header>LF LOGISTIC</ion-list-header>
+            <ion-note>{{ user.displayName }}</ion-note>
+
+            @for (p of appPages; track p; let i = $index) {
+            <ion-menu-toggle auto-hide="false">
+              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+                routerLinkActive="selected">
+                <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'"
+                  [md]="p.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+            }
+
+            <ion-item button (click)="logout()">
+              <ion-icon slot="start" name="log-out-outline"></ion-icon>
+              <ion-label>Cerrar sesión</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-menu>
+
+      <ion-router-outlet id="main-content"></ion-router-outlet>
+    </ion-split-pane>
+  </ng-container>
+
+  <ng-template #loginView>
+    <ion-content class="ion-padding">
+      <div class="login-container ion-justify-content-center ion-align-items-center">
+        <div class="login-box">
+          <img src="assets/logo.png"  class="logo" />
+          <p>Gestion de Logistica</p>
+          <ion-button expand="block" shape="round" color="primary" (click)="login()" class="google-login-button">
+            <img src="https://img.icons8.com/?size=256&id=17949&format=png" slot="start" class="google-icon" />
+            Iniciar sesión con Google
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-app>
